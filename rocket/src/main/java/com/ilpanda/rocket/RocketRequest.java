@@ -59,6 +59,7 @@ public class RocketRequest {
 
     public RocketRequest md5(String md5) {
         this.md5 = md5;
+        transform(new ChecksumTransformation());
         return this;
     }
 
@@ -145,6 +146,9 @@ public class RocketRequest {
         return targetFile;
     }
 
+    public String getFileMd5() {
+        return md5;
+    }
 
     int getFileSize() {
         return fileSize;

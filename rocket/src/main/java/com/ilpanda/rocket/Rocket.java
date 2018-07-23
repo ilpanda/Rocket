@@ -87,6 +87,10 @@ public class Rocket {
         dispatcher.dispatchCancelTag(tag);
     }
 
+    public void cancelCallback(RocketRequest.RocketCallback callback) {
+        if (callback == null) return;
+        dispatcher.dispatchCancelCallback(callback);
+    }
 
     public void pauseTag(Object tag) {
         if (tag == null) {
@@ -158,10 +162,10 @@ public class Rocket {
             return;
         }
 
-        if (result != null && result.exists()) {
-            callback.onSuccess(result);
-        } else {
+        if (e != null) {
             callback.onError(e);
+        } else {
+            callback.onSuccess(result);
         }
     }
 

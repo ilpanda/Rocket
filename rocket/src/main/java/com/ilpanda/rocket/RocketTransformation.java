@@ -4,6 +4,6 @@ import java.io.File;
 
 public interface RocketTransformation {
 
-    File transform(File file);
+    File transform(RocketRequest request, File file) throws TransformException;
 
 }

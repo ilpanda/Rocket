@@ -97,15 +97,16 @@ public class RocketResponse implements Runnable {
                 List<RocketTransformation> transformations = request.getTransformations();
                 for (int i = 0; i < transformations.size(); i++) {
                     RocketTransformation rocketTransformation = transformations.get(i);
-                    result = rocketTransformation.transform(result);
+                    result = rocketTransformation.transform(request, result);
                 }
             }
             if (result != null && result.exists()) {
+                this.exception = null;
                 dispatcher.dispatchComplete(this);
             } else {
                 dispatcher.dispatchError(this);
             }
-        } catch (PrepareException e) {
+        } catch (PrepareException | TransformException e) {
             exception = e;
             dispatcher.dispatchError(this);
         } catch (InterruptedIOException e) {
