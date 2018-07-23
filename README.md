@@ -152,9 +152,42 @@ Rocket 是为了让 Android 平台上的文件下载更简单。
                 .download();
 ```
 
-如果你事先知道文件大小, Rocket 可以为你检测 SD 卡空间是否足够。
+如果你事先知道文件大小, Rocket 可以为你检测 SD 卡空间是否足够。默认情况 , Rocket 需要下载文件大小的
+1.3倍空间。
 
 ```
+// 下面代码会下载失败,因为所需要的空间超过了磁盘空间。
+        Rocket.get()
+                .load(downloadUrl)
+                .fileSize(300000000000L)
+                .forceDownload()
+                .callback(new RocketRequest.RocketCallback() {
+                    @Override
+                    public void onSuccess(File result) {
+                        Log.i(TAG, "download success : " + result.getAbsolutePath());
+                    }
 
+                    @Override
+                    public void onError(Exception e) {
+                        Log.e(TAG, "download error : \n " + Utils.getThreadStack(e));
+                    }
+
+                    @Override
+                    public void onProgress(long bytesRead, long contentLength, float percent) {
+                        Log.e(TAG, "download progress : " + bytesRead + "-- the content length : "
+                                + contentLength + "-- the percent : " + percent);
+                    }
+                })
+                .download();
 ```
 
+默认情况下,文件的下载路径为 /sdcard/android/data/包名/files 目录下, 你也可以为你的请求
+配置下载路径。
+
+
+```
+      Rocket.get()
+                .load(downloadUrl)
+                .targetFile(targetFile)
+                .download();
+```

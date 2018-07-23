@@ -146,7 +146,7 @@ public class RocketRequest {
         return targetFile;
     }
 
-    public String getFileMd5() {
+    String getFileMd5() {
         return md5;
     }
 
