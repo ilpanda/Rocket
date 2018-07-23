@@ -29,10 +29,11 @@ public class RocketDispatcher {
     private static final int REQUEST_PROGRESS = 6;
     private static final int REQUEST_RETRY = 7;
     private static final int REQUEST_ERROR = 8;
-    private static final int RESPONSE_DELAY_NEXT_BATCH = 9;
-    static final int RESPONSE_COMPLETE = 10;
-    static final int RESPONSE_PROGRESS = 11;
-    static final int REQUEST_BATCH_RESUME = 12;
+    private static final int REQUEST_CANCEL_CALLBACK = 9;
+    private static final int RESPONSE_DELAY_NEXT_BATCH = 10;
+    static final int RESPONSE_COMPLETE = 11;
+    static final int RESPONSE_PROGRESS = 12;
+    static final int REQUEST_BATCH_RESUME = 13;
 
 
     private HandlerThread dispatcherThread;
@@ -114,6 +115,11 @@ public class RocketDispatcher {
         dispatcherHandler.sendMessage(dispatcherHandler.obtainMessage(REQUEST_CANCEL_TAG, tag));
     }
 
+    void dispatchCancelCallback(RocketRequest.RocketCallback tag) {
+        dispatcherHandler.sendMessage(dispatcherHandler.obtainMessage(REQUEST_CANCEL_CALLBACK, tag));
+    }
+
+
     private void performSubmit(RocketRequest request) {
 
         if (pausedTags.contains(request.getTag())) {
@@ -188,6 +194,25 @@ public class RocketDispatcher {
         }
     }
 
+    private void performCancelCallback(RocketRequest.RocketCallback cancelCallback) {
+
+        List<RocketResponse> responseList = new ArrayList<>(responseMap.values());
+        for (int i = 0, n = responseList.size(); i < n; i++) {
+            // cancel request
+            RocketResponse response = responseList.get(i);
+            RocketRequest request = response.getRequest();
+            cancelCallback(request, cancelCallback);
+
+            // cancel  attach  request
+            List<RocketRequest> requests = response.getRequests();
+            if (requests != null && !requests.isEmpty()) {
+                for (int j = 0; j < requests.size(); j++) {
+                    RocketRequest rocketRequest = requests.get(i);
+                    cancelCallback(rocketRequest, cancelCallback);
+                }
+            }
+        }
+    }
 
     private void performResume(Object tag) {
         // Trying to resume a tag that is not paused.
@@ -323,6 +348,11 @@ public class RocketDispatcher {
                 case REQUEST_RESUME:
                     dispatcher.performResume(msg.obj);
                     break;
+
+                case REQUEST_CANCEL_CALLBACK:
+                    dispatcher.performCancelCallback((RocketRequest.RocketCallback) msg.obj);
+                    break;
+
             }
         }
     }
@@ -332,4 +362,19 @@ public class RocketDispatcher {
             performCancel(request);
         }
     }
+
+    private void cancelCallback(RocketRequest request, RocketRequest.RocketCallback cancelCallback) {
+
+        if (request.getCallback() == null) return;
+
+        if (request.getCallback() == cancelCallback) {
+            String key = request.getUrl();
+            RocketResponse rocketResponse = responseMap.get(key);
+            if (rocketResponse != null) {
+                rocketResponse.detach(request);
+            }
+        }
+    }
+
+
 }
