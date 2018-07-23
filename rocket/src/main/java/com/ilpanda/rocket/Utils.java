@@ -10,6 +10,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -119,5 +122,22 @@ public class Utils {
             }
         }
     }
+
+    public static String getThreadStack(Throwable ex) {
+        final Writer result = new StringWriter();
+        final PrintWriter printWriter = new PrintWriter(result);
+
+        Throwable cause = ex;
+        while (cause != null) {
+            cause.printStackTrace(printWriter);
+            break;
+        }
+        String stackTrace = result.toString();
+
+        printWriter.close();
+
+        return stackTrace.trim();
+    }
+
 
 }

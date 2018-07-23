@@ -22,7 +22,7 @@ public class RocketRequest {
 
     private int interval = NO_INTERVAL;
 
-    private int fileSize;  //byte
+    private long fileSize;  //byte
 
     private String md5;
 
@@ -63,7 +63,7 @@ public class RocketRequest {
         return this;
     }
 
-    public RocketRequest fileSize(int fileSize) {
+    public RocketRequest fileSize(long fileSize) {
         this.fileSize = fileSize;
         return this;
     }
@@ -150,7 +150,7 @@ public class RocketRequest {
         return md5;
     }
 
-    int getFileSize() {
+    long getFileSize() {
         return fileSize;
     }
 

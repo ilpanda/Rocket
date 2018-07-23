@@ -5,6 +5,10 @@ import java.io.IOException;
 
 public class DiskSpaceInterceptor implements RocketInterceptor {
 
+    private long availableDiskSize;
+
+    private long needDiskSize;
+
     @Override
     public boolean canInterceptor(RocketRequest request) {
 
@@ -16,9 +20,13 @@ public class DiskSpaceInterceptor implements RocketInterceptor {
 
         float scale = 1.3f;
 
-        long minSpace = (long) (request.getFileSize() * scale);
+        long needDiskSize = (long) (request.getFileSize() * scale);
 
-        if (Utils.getAvailableDiskSize(targetFile) < minSpace) {
+        long availableDiskSize = Utils.getAvailableDiskSize(targetFile.getParentFile());
+
+        if (availableDiskSize < needDiskSize) {
+            this.availableDiskSize = availableDiskSize;
+            this.needDiskSize = needDiskSize;
             return true;
         }
 
@@ -27,6 +35,7 @@ public class DiskSpaceInterceptor implements RocketInterceptor {
 
     @Override
     public File interceptor(RocketRequest request) throws IOException {
-        throw new SpaceUnAvailableException("disk space is unavailable " + request);
+        throw new SpaceUnAvailableException("disk space is unavailable . the availableDiskSize is : " +
+                " " + availableDiskSize + "--  the  request  need size:" + needDiskSize);
     }
 }
