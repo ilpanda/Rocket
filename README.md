@@ -27,7 +27,7 @@ Rocket 是为了让 Android 平台上的文件下载更简单。
 ### 配置
 
 
-在使用 Rocket 之前, 你需要在你的 Application 当中初始化。
+在使用 Rocket 之前, 你需要在你的 Application 当中初始化 Rocket。
 
 ```
         Rocket.initialize(this);
@@ -86,7 +86,7 @@ Rocket 是为了让 Android 平台上的文件下载更简单。
 ```
 
 
-如果文件已经下载到本地,默认情况下 Rocket 不会重新下载。
+如果文件已经成功下载到本地,默认情况下 Rocket 不会重新下载。
 
 ```
      Rocket.get()
@@ -100,7 +100,7 @@ Rocket 是为了让 Android 平台上的文件下载更简单。
                 .download();
 ```
 
-如果你想要强制下载文件, 调用 forceDownload() 方法。
+如果文件已经成功下载到本地,但是你想要重新从网络下载文件, 调用 forceDownload() 方法。
 
 ```
      Rocket.get()
@@ -131,7 +131,7 @@ Rocket 是为了让 Android 平台上的文件下载更简单。
 ```
       Rocket.get()
                 .load(downloadUrl)
-                .interval(3000)  // 每隔 3s
+                .interval(3000)  // 每隔 3s刷新一次下载进度。
                 .callback(new RocketRequest.RocketCallback() {
                     @Override
                     public void onSuccess(File result) {
@@ -152,7 +152,7 @@ Rocket 是为了让 Android 平台上的文件下载更简单。
                 .download();
 ```
 
-如果你事先知道文件大小, Rocket 可以为你检测 SD 卡空间是否足够。默认情况 , Rocket 需要下载文件大小的
+如果你事先知道文件大小,Rocket 可以为你检测 SD 卡空间是否足够。默认情况, Rocket 需要下载文件大小的
 1.3倍磁盘空间。
 
 ```
