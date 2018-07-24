@@ -23,6 +23,8 @@ public class MainActivity extends AppCompatActivity {
         Rocket.initialize(this);
 
 
+        checksum();
+
     }
 
 
@@ -126,6 +128,22 @@ public class MainActivity extends AppCompatActivity {
 
     private void cancelTag() {
         Rocket.get().cancelTag(this);
+    }
+
+
+    private void checksum() {
+
+        String downloadUrl = TestUriProvider.APK_DOWNLOAD_0;
+        Rocket.get()
+                .load(downloadUrl)
+                .md5("")
+                .callback(new RocketRequest.SimpleCallback() {
+                    @Override
+                    public void onError(Exception e) {
+                        Log.e(TAG, "download error : \n " + Utils.getThreadStack(e));
+                    }
+                })
+                .download();
     }
 
 }

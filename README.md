@@ -47,7 +47,7 @@ Rocket 是为了让 Android 平台上的文件下载更简单。
 ```
 
 
-如果你想要使用回调, 使用 RocketCallback 。
+如果你想要使用回调, 使用 RocketCallback 。回调方法都是在主线程执行。
 
 ```
         Rocket.get()
@@ -153,7 +153,7 @@ Rocket 是为了让 Android 平台上的文件下载更简单。
 ```
 
 如果你事先知道文件大小, Rocket 可以为你检测 SD 卡空间是否足够。默认情况 , Rocket 需要下载文件大小的
-1.3倍空间。
+1.3倍磁盘空间。
 
 ```
 // 下面代码会下载失败,因为所需要的空间超过了磁盘空间。
@@ -194,9 +194,9 @@ Rocket 是为了让 Android 平台上的文件下载更简单。
 
 
 如果你想要取消下载请求,你需要设置 tag 。
+
 ```
     private void downloadTag() {
-        String downloadUrl = TestUriProvider.APK_DOWNLOAD_0;
         Rocket.get()
                 .load(downloadUrl)
                 .tag(this)
@@ -208,4 +208,20 @@ Rocket 是为了让 Android 平台上的文件下载更简单。
         Rocket.get().cancelTag(this);
     }
 
+```
+
+如果文件下载成功后,你想要校验文件的 MD5 ,你可以使用以下代码 :
+文件校验失败后,会回调 RocketCallback 的 onError() 方法。
+
+```
+      Rocket.get()
+                  .load(downloadUrl)
+                  .md5(fileMD5)
+                  .callback(new RocketRequest.SimpleCallback() {
+                      @Override
+                      public void onError(Exception e) {
+                          Log.e(TAG, "download error : \n " + Utils.getThreadStack(e));
+                      }
+                  })
+                  .download();
 ```
