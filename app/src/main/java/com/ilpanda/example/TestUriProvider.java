@@ -1,4 +1,4 @@
-package com.ilpanda.rocket.example;
+package com.ilpanda.example;
 
 public class TestUriProvider {
 

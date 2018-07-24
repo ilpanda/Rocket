@@ -1,11 +1,9 @@
-package com.ilpanda.rocket.example;
+package com.ilpanda.example;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
-import com.ilpanda.rocket.ChecksumTransformation;
-import com.ilpanda.rocket.R;
 import com.ilpanda.rocket.Rocket;
 import com.ilpanda.rocket.RocketRequest;
 import com.ilpanda.rocket.Utils;
@@ -95,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
         String downloadUrl = TestUriProvider.APK_DOWNLOAD_0;
         Rocket.get()
                 .load(downloadUrl)
-                .fileSize(300000000000L)
+                .fileSize(Long.MAX_VALUE)
                 .forceDownload()
                 .callback(new RocketRequest.RocketCallback() {
                     @Override
@@ -117,5 +115,17 @@ public class MainActivity extends AppCompatActivity {
                 .download();
     }
 
+    private void downloadTag() {
+        String downloadUrl = TestUriProvider.APK_DOWNLOAD_0;
+        Rocket.get()
+                .load(downloadUrl)
+                .tag(this)
+                .download();
+    }
+
+
+    private void cancelTag() {
+        Rocket.get().cancelTag(this);
+    }
 
 }

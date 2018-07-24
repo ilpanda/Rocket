@@ -36,6 +36,6 @@ public class DiskSpaceInterceptor implements RocketInterceptor {
     @Override
     public File interceptor(RocketRequest request) throws IOException {
         throw new SpaceUnAvailableException("disk space is unavailable . the availableDiskSize is : " +
-                " " + availableDiskSize + "--  the  request  need size:" + needDiskSize);
+                " " + availableDiskSize + " --  the request need size:" + needDiskSize);
     }
 }

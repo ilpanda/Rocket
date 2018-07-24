@@ -4,7 +4,7 @@ Rocket 是为了让 Android 平台上的文件下载更简单。
 
 通过几行代码就可以轻松实现下载功能 。
 
-依赖的网络框架为 OkHttp 。
+使用的网络框架为 OkHttp 。
 
 ---
 
@@ -20,7 +20,7 @@ Rocket 是为了让 Android 平台上的文件下载更简单。
 9. 下载出错,重新下载。
 10. 支持对下载文件额外处理。
 11. 文件 MD5 校验。
-12. 如果本地文件存在避免,重复网络请求。
+12. 如果本地文件存在,避免重复网络请求。
 
 ---
 
@@ -157,9 +157,9 @@ Rocket 是为了让 Android 平台上的文件下载更简单。
 
 ```
 // 下面代码会下载失败,因为所需要的空间超过了磁盘空间。
-        Rocket.get()
+       Rocket.get()
                 .load(downloadUrl)
-                .fileSize(300000000000L)
+                .fileSize(Long.MAX_VALUE)
                 .forceDownload()
                 .callback(new RocketRequest.RocketCallback() {
                     @Override
@@ -190,4 +190,22 @@ Rocket 是为了让 Android 平台上的文件下载更简单。
                 .load(downloadUrl)
                 .targetFile(targetFile)
                 .download();
+```
+
+
+如果你想要取消下载请求,你需要设置 tag 。
+```
+    private void downloadTag() {
+        String downloadUrl = TestUriProvider.APK_DOWNLOAD_0;
+        Rocket.get()
+                .load(downloadUrl)
+                .tag(this)
+                .download();
+    }
+
+
+    private void cancelTag() {
+        Rocket.get().cancelTag(this);
+    }
+
 ```
