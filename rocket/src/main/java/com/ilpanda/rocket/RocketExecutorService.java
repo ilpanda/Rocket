@@ -20,6 +20,14 @@ public class RocketExecutorService extends ThreadPoolExecutor {
     }
 
 
+
+    private void setThreadCount(int threadCount) {
+        setCorePoolSize(threadCount);
+        setMaximumPoolSize(threadCount);
+    }
+
+
+
     @Override
     public Future<?> submit(Runnable task) {
         RocketFutureTask rocketFutureTask = new RocketFutureTask((RocketResponse) task);
