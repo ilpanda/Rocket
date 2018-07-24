@@ -1,16 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
 
     <TextView
+        android:id="@+id/download"
+        style="@style/DownloadTextTheme"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello  Rocket "
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:text="下载文件" />
 
-</android.support.constraint.ConstraintLayout>
+    <TextView
+        android:id="@+id/download_callback"
+        style="@style/DownloadTextTheme"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="下载回调" />
+
+
+    <TextView
+        android:id="@+id/check_disk_space"
+        style="@style/DownloadTextTheme"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="下载前检测磁盘空间" />
+
+
+    <TextView
+        android:id="@+id/download_checksum"
+        style="@style/DownloadTextTheme"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="下载完成后 MD5 校验" />
+
+
+    <TextView
+        android:id="@+id/download_interval"
+        style="@style/DownloadTextTheme"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="下载进度刷新间隔" />
+
+
+</LinearLayout>

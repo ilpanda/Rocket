@@ -119,7 +119,7 @@ Rocket 是为了让 Android 平台上的文件下载更简单。
 
                     @Override
                     public void onProgress(long bytesRead, long contentLength, float percent) {
-                        Log.e(TAG, "download progress : " + bytesRead + "-- the content length : "
+                        Log.i(TAG, "download progress : " + bytesRead + "-- the content length : "
                                 + contentLength + "-- the percent : " + percent);
                     }
                 })
@@ -145,7 +145,7 @@ Rocket 是为了让 Android 平台上的文件下载更简单。
 
                     @Override
                     public void onProgress(long bytesRead, long contentLength, float percent) {
-                        Log.e(TAG, "download progress : " + bytesRead + "-- the content length : "
+                        Log.i(TAG, "download progress : " + bytesRead + "-- the content length : "
                                 + contentLength + "-- the percent : " + percent);
                     }
                 })
@@ -174,7 +174,7 @@ Rocket 是为了让 Android 平台上的文件下载更简单。
 
                     @Override
                     public void onProgress(long bytesRead, long contentLength, float percent) {
-                        Log.e(TAG, "download progress : " + bytesRead + "-- the content length : "
+                        Log.i(TAG, "download progress : " + bytesRead + "-- the content length : "
                                 + contentLength + "-- the percent : " + percent);
                     }
                 })
@@ -220,7 +220,7 @@ Rocket 是为了让 Android 平台上的文件下载更简单。
                   .callback(new RocketRequest.SimpleCallback() {
                       @Override
                       public void onError(Exception e) {
-                          Log.e(TAG, "download error : \n " + Utils.getThreadStack(e));
+                          Log.i(TAG, "download error : \n " + Utils.getThreadStack(e));
                       }
                   })
                   .download();
