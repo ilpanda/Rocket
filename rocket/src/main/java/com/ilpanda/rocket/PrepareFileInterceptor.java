@@ -25,6 +25,7 @@ public class PrepareFileInterceptor extends RocketInterceptor {
                 request.setTargetFile(targetFile);
             } else {
                 targetDir = targetFile.getParentFile();
+                fileName = targetFile.getName();
             }
 
             if (!targetDir.exists()) {

@@ -128,6 +128,9 @@ public class RocketRequest {
     }
 
     public void download() {
+        if (Rocket.context == null) {
+            throw new IllegalArgumentException("you need  to initialize  Rocket in your application");
+        }
         rocket.download(this);
     }
 
@@ -207,9 +210,9 @@ public class RocketRequest {
 
     public interface RocketCallback {
 
-        void onSuccess(File result);
+        void onSuccess(String url, File result);
 
-        void onError(Exception e);
+        void onError(String url, Exception e);
 
         void onProgress(long bytesRead, long contentLength, float percent);
     }
@@ -217,12 +220,12 @@ public class RocketRequest {
     public static class SimpleCallback implements RocketCallback {
 
         @Override
-        public void onSuccess(File result) {
+        public void onSuccess(String url, File result) {
 
         }
 
         @Override
-        public void onError(Exception e) {
+        public void onError(String String, Exception e) {
 
         }
 

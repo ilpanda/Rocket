@@ -81,13 +81,14 @@ public class MainActivity extends AppCompatActivity {
         Rocket.get()
                 .load(downloadUrl)
                 .callback(new RocketRequest.RocketCallback() {
+
                     @Override
-                    public void onSuccess(File result) {
+                    public void onSuccess(String url, File result) {
                         Log.i(TAG, "download success : " + result.getAbsolutePath());
                     }
 
                     @Override
-                    public void onError(Exception e) {
+                    public void onError(String url, Exception e) {
                         Toast.makeText(MainActivity.this, "下载失败,请查看日志。", Toast.LENGTH_LONG).show();
                         Log.e(TAG, "download error : \n " + Utils.getThreadStack(e));
                     }
@@ -110,15 +111,16 @@ public class MainActivity extends AppCompatActivity {
                 .forceDownload()
                 .callback(new RocketRequest.RocketCallback() {
                     @Override
-                    public void onSuccess(File result) {
+                    public void onSuccess(String url, File result) {
                         Log.i(TAG, "download success : " + result.getAbsolutePath());
                     }
 
                     @Override
-                    public void onError(Exception e) {
+                    public void onError(String url, Exception e) {
                         Toast.makeText(MainActivity.this, "下载失败,请查看日志。", Toast.LENGTH_LONG).show();
                         Log.e(TAG, "download error : \n " + Utils.getThreadStack(e));
                     }
+
 
                     @Override
                     public void onProgress(long bytesRead, long contentLength, float percent) {
@@ -140,15 +142,16 @@ public class MainActivity extends AppCompatActivity {
                 .forceDownload()
                 .callback(new RocketRequest.RocketCallback() {
                     @Override
-                    public void onSuccess(File result) {
+                    public void onSuccess(String url, File result) {
                         Log.i(TAG, "download success : " + result.getAbsolutePath());
                     }
 
                     @Override
-                    public void onError(Exception e) {
+                    public void onError(String url, Exception e) {
                         Toast.makeText(MainActivity.this, "下载失败,请查看日志。", Toast.LENGTH_LONG).show();
                         Log.e(TAG, "download error : \n " + Utils.getThreadStack(e));
                     }
+
 
                     @Override
                     public void onProgress(long bytesRead, long contentLength, float percent) {
@@ -181,15 +184,17 @@ public class MainActivity extends AppCompatActivity {
                 .md5("952C473765A25DC003C6750BB85C947F")
                 .callback(new RocketRequest.SimpleCallback() {
                     @Override
-                    public void onSuccess(File result) {
+                    public void onSuccess(String url, File result) {
                         Log.i(TAG, "download success : " + result.getAbsolutePath());
                     }
 
                     @Override
-                    public void onError(Exception e) {
+                    public void onError(String url, Exception e) {
                         Toast.makeText(MainActivity.this, "下载失败,请查看日志。", Toast.LENGTH_LONG).show();
                         Log.e(TAG, "download error : \n " + Utils.getThreadStack(e));
                     }
+
+
                 })
                 .download();
     }
@@ -210,7 +215,7 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onError(Exception e) {
+                    public void onError(String String, Exception e) {
                         Toast.makeText(MainActivity.this, "下载失败,请查看日志。", Toast.LENGTH_LONG).show();
                         Log.e(TAG, "download error : \n " + Utils.getThreadStack(e));
                     }

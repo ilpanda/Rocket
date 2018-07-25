@@ -21,7 +21,7 @@ public class Rocket {
     private static volatile Rocket singleton = null;
 
     @SuppressLint("StaticFieldLeak")
-    private static Context context;
+    static Context context;
 
     private RocketDispatcher dispatcher;
 
@@ -163,9 +163,9 @@ public class Rocket {
         }
 
         if (e != null) {
-            callback.onError(e);
+            callback.onError(request.getUrl(), e);
         } else {
-            callback.onSuccess(result);
+            callback.onSuccess(request.getUrl(), result);
         }
     }
 
