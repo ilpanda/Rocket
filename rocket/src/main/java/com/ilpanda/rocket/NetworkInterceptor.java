@@ -1,14 +1,16 @@
 package com.ilpanda.rocket;
 
+import android.net.NetworkInfo;
+
 import java.io.File;
 import java.io.IOException;
 
-public class NetworkInterceptor implements RocketInterceptor {
+public class NetworkInterceptor extends RocketInterceptor {
 
 
     private RocketDownloader downloader;
 
-    public  NetworkInterceptor(RocketDownloader downloader) {
+    public NetworkInterceptor(RocketDownloader downloader) {
         this.downloader = downloader;
     }
 
@@ -26,4 +28,13 @@ public class NetworkInterceptor implements RocketInterceptor {
         return result;
     }
 
+    @Override
+    public boolean shouldRetry(boolean airplaneMode, NetworkInfo info) {
+        return info == null || info.isConnected();
+    }
+
+    @Override
+    public boolean supportsReplay() {
+        return true;
+    }
 }

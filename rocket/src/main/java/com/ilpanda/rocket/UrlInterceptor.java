@@ -5,7 +5,7 @@ import android.text.TextUtils;
 import java.io.File;
 import java.io.IOException;
 
-public class UrlInterceptor implements RocketInterceptor {
+public class UrlInterceptor extends RocketInterceptor {
     @Override
     public boolean canInterceptor(RocketRequest request) {
         String url = request.getUrl();

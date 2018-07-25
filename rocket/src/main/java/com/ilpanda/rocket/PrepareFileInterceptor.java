@@ -3,7 +3,7 @@ package com.ilpanda.rocket;
 import java.io.File;
 import java.io.IOException;
 
-public class PrepareFileInterceptor implements RocketInterceptor {
+public class PrepareFileInterceptor extends RocketInterceptor {
 
     private static final String TAG = "PrepareFileInterceptor";
 

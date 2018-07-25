@@ -1,12 +1,21 @@
 package com.ilpanda.rocket;
 
+import android.net.NetworkInfo;
+
 import java.io.File;
 import java.io.IOException;
 
-public interface RocketInterceptor {
+public abstract class RocketInterceptor {
 
-    boolean canInterceptor(RocketRequest request);
+    public abstract boolean canInterceptor(RocketRequest request);
 
-    File interceptor(RocketRequest request) throws IOException;
+    public abstract File interceptor(RocketRequest request) throws IOException;
 
+    public boolean shouldRetry(boolean airplaneMode, NetworkInfo info) {
+        return false;
+    }
+
+    public boolean supportsReplay() {
+        return false;
+    }
 }

@@ -54,7 +54,7 @@ public class Rocket {
     private Rocket() {
 
         RocketExecutorService executorService = new RocketExecutorService();
-        dispatcher = new RocketDispatcher(this, executorService, HANDLER);
+        dispatcher = new RocketDispatcher(context, this, executorService, HANDLER);
 
         RocketDownloader rocketDownloader = new RocketDownloader(dispatcher);
 

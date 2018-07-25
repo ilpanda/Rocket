@@ -3,7 +3,7 @@ package com.ilpanda.rocket;
 import java.io.File;
 import java.io.IOException;
 
-public class DiskSpaceInterceptor implements RocketInterceptor {
+public class DiskSpaceInterceptor extends RocketInterceptor {
 
     private long availableDiskSize;
 

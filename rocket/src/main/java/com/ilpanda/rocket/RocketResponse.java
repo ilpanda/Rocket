@@ -1,5 +1,6 @@
 package com.ilpanda.rocket;
 
+import android.net.NetworkInfo;
 import android.support.annotation.Nullable;
 
 import java.io.File;
@@ -121,10 +122,14 @@ public class RocketResponse implements Runnable {
         }
     }
 
-    boolean shouldRetry() {
+    boolean shouldRetry(boolean airplaneMode, NetworkInfo networkInfo) {
         if (retryCount <= 0) return false;
         retryCount--;
-        return true;
+        return rocketInterceptor.shouldRetry(airplaneMode, networkInfo);
+    }
+
+    boolean supportsReplay() {
+        return rocketInterceptor.supportsReplay();
     }
 
     String getKey() {
