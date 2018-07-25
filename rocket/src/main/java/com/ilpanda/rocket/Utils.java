@@ -1,6 +1,10 @@
 package com.ilpanda.rocket;
 
+import android.content.ContentResolver;
+import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.StatFs;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -18,6 +22,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import static android.os.Build.VERSION.SDK_INT;
+import static android.os.Build.VERSION_CODES.JELLY_BEAN_MR1;
 import static android.os.Build.VERSION_CODES.JELLY_BEAN_MR2;
 
 
@@ -137,6 +142,33 @@ public class Utils {
         printWriter.close();
 
         return stackTrace.trim();
+    }
+
+    static boolean isAirplaneModeOn(Context context) {
+        ContentResolver contentResolver = context.getContentResolver();
+        try {
+            if (SDK_INT < JELLY_BEAN_MR1) {
+                //noinspection deprecation
+                return Settings.System.getInt(contentResolver, Settings.System.AIRPLANE_MODE_ON, 0) != 0;
+            }
+            return Settings.Global.getInt(contentResolver, Settings.Global.AIRPLANE_MODE_ON, 0) != 0;
+        } catch (NullPointerException e) {
+            // https://github.com/square/picasso/issues/761, some devices might crash here, assume that
+            // airplane mode is off.
+            return false;
+        } catch (SecurityException e) {
+            //https://github.com/square/picasso/issues/1197
+            return false;
+        }
+    }
+
+    static boolean hasPermission(Context context, String permission) {
+        return context.checkCallingOrSelfPermission(permission) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    @SuppressWarnings("unchecked")
+    static <T> T getService(Context context, String service) {
+        return (T) context.getSystemService(service);
     }
 
 
