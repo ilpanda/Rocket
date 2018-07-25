@@ -39,9 +39,7 @@ Rocket 是为了让 Android 平台上的文件下载更简单。
 Gradle :
 
 ```
-
 compile 'com.ilpanda:rocket:1.0.1'
-
 ```
 ---
 
