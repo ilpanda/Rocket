@@ -149,7 +149,7 @@ compile 'com.ilpanda:rocket:1.0.1'
                 .download();
 ```
 
-默认情况下, Rocket 每隔一秒刷新一次下载进度,如果你想更改,可以使用 interval() 方法:
+默认情况下, Rocket 每隔一秒刷新一次下载进度,如果你想更改刷新间隔,可以使用 interval() 方法:
 
 ```
       Rocket.get()
@@ -252,4 +252,5 @@ compile 'com.ilpanda:rocket:1.0.1'
 ---
 
 ### TODO
-1. 添加日志配置
+1. 添加日志配置。
+2. 支持断点下载。
