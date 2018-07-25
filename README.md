@@ -22,7 +22,31 @@ Rocket 是为了让 Android 平台上的文件下载更简单。
 
 ---
 
-### 配置
+### 下载
+
+
+你可以下载源码依赖 module , 也可以通过 Maven or Gradle 依赖 。
+
+```
+<dependency>
+  <groupId>com.ilpanda</groupId>
+  <artifactId>rocket</artifactId>
+  <version>1.0.1</version>
+  <type>pom</type>
+</dependency>
+```
+
+Gradle :
+
+```
+
+compile 'com.ilpanda:rocket:1.0.1'
+
+```
+---
+
+
+### 使用方法
 
 
 在使用 Rocket 之前, 你需要在你的 Application 当中初始化 Rocket。
@@ -38,12 +62,6 @@ Rocket 是为了让 Android 平台上的文件下载更简单。
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 ```
 
-
-
----
-
-
-### 使用方法
 
 最简单的方法 :
 
