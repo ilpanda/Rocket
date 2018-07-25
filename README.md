@@ -1,10 +1,8 @@
-# 什么是 Rocket !
+###  Rocket
 
 Rocket 是为了让 Android 平台上的文件下载更简单。
 
 通过几行代码就可以轻松实现下载功能 。
-
-使用的网络框架为 OkHttp 。
 
 ---
 
@@ -33,10 +31,19 @@ Rocket 是为了让 Android 平台上的文件下载更简单。
         Rocket.initialize(this);
 ```
 
+你也需要在 AndroidManifest.xml 添加以下权限。
+
+```
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+```
+
+
 
 ---
 
-### 使用
+
+### 使用方法
 
 最简单的方法 :
 
