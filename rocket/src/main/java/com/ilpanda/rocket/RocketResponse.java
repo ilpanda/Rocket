@@ -140,11 +140,11 @@ public class RocketResponse implements Runnable {
         return future != null && future.isCancelled();
     }
 
-    boolean cancel() {
+    boolean cancel(boolean interruptIfRunning) {
         return this.request == null
                 && (this.requests == null || this.requests.isEmpty())
                 && this.future != null
-                && this.future.cancel(true);
+                && this.future.cancel(interruptIfRunning);
     }
 
 

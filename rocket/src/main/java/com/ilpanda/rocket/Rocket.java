@@ -74,17 +74,25 @@ public class Rocket {
 
 
     public void cancel(RocketRequest request) {
+        cancel(request, true);
+    }
+
+    public void cancel(RocketRequest request, boolean interruptIfRunning) {
         if (request == null) {
             throw new IllegalArgumentException("Cannot cancel  with null request ");
         }
-        dispatcher.dispatchCancel(request);
+        dispatcher.dispatchCancel(request, interruptIfRunning);
     }
 
     public void cancelTag(Object tag) {
+        cancelTag(tag, true);
+    }
+
+    public void cancelTag(Object tag, boolean interruptIfRunning) {
         if (tag == null) {
             throw new IllegalArgumentException("Cannot cancel requests with null tag.");
         }
-        dispatcher.dispatchCancelTag(tag);
+        dispatcher.dispatchCancelTag(tag, interruptIfRunning);
     }
 
     public void cancelCallback(RocketRequest.RocketCallback callback) {

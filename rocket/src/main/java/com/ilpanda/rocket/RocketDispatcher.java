@@ -36,6 +36,10 @@ public class RocketDispatcher {
     private static final int AIRPLANE_MODE_ON = 1;
 
 
+    private static final int INTERRUPT_IF_RUNNING = 0;
+    private static final int NO_INTERRUPT_IF_RUNNING = 1;
+
+
     private static final int REQUEST_SUBMIT = 0;
     private static final int REQUEST_PAUSE = 1;
     private static final int REQUEST_RESUME = 2;
@@ -120,8 +124,8 @@ public class RocketDispatcher {
     }
 
 
-    void dispatchCancel(RocketRequest request) {
-        dispatcherHandler.sendMessage(dispatcherHandler.obtainMessage(REQUEST_CANCEL, request));
+    void dispatchCancel(RocketRequest request, boolean interruptIfRunning) {
+        dispatcherHandler.sendMessage(dispatcherHandler.obtainMessage(REQUEST_CANCEL, mapInterruptBooleanToInt(interruptIfRunning), 0, request));
     }
 
     void dispatchComplete(RocketResponse response) {
@@ -145,8 +149,8 @@ public class RocketDispatcher {
         dispatcherHandler.sendMessage(dispatcherHandler.obtainMessage(REQUEST_ERROR, response));
     }
 
-    void dispatchCancelTag(Object tag) {
-        dispatcherHandler.sendMessage(dispatcherHandler.obtainMessage(REQUEST_CANCEL_TAG, tag));
+    void dispatchCancelTag(Object tag, boolean interruptIfRunning) {
+        dispatcherHandler.sendMessage(dispatcherHandler.obtainMessage(REQUEST_CANCEL_TAG, mapInterruptBooleanToInt(interruptIfRunning), 0, tag));
     }
 
     void dispatchCancelCallback(RocketRequest.RocketCallback tag) {
@@ -297,7 +301,7 @@ public class RocketDispatcher {
                 }
             }
 
-            if (next.cancel()) {
+            if (next.cancel(true)) {
                 it.remove();
             }
         }
@@ -347,14 +351,14 @@ public class RocketDispatcher {
     }
 
 
-    private void performCancel(RocketRequest request) {
+    private void performCancel(RocketRequest request, boolean interruptIfRunning) {
         String key = request.getUrl();
         RocketResponse rocketResponse = responseMap.get(key);
 
         if (rocketResponse != null) {
             request.cancel();
             rocketResponse.detach(request);
-            if (rocketResponse.cancel()) {
+            if (rocketResponse.cancel(interruptIfRunning)) {
                 responseMap.remove(key);
             }
         }
@@ -371,20 +375,20 @@ public class RocketDispatcher {
         batch(response);
     }
 
-    private void performCancelTag(Object tag) {
+    private void performCancelTag(Object tag, boolean interruptIfRunning) {
         List<RocketResponse> responseList = new ArrayList<>(responseMap.values());
         for (int i = 0, n = responseList.size(); i < n; i++) {
             // cancel request
             RocketResponse response = responseList.get(i);
             RocketRequest request = response.getRequest();
-            cancelRequest(request, tag);
+            cancelRequest(request, tag, interruptIfRunning);
 
             // cancel  attach  request
             List<RocketRequest> requests = response.getRequests();
             if (requests != null && !requests.isEmpty()) {
                 for (int j = 0; j < requests.size(); j++) {
-                    RocketRequest rocketRequest = requests.get(i);
-                    cancelRequest(rocketRequest, tag);
+                    RocketRequest rocketRequest = requests.get(j);
+                    cancelRequest(rocketRequest, tag, interruptIfRunning);
                 }
             }
         }
@@ -449,11 +453,11 @@ public class RocketDispatcher {
                     break;
 
                 case REQUEST_CANCEL:
-                    dispatcher.performCancel((RocketRequest) msg.obj);
+                    dispatcher.performCancel((RocketRequest) msg.obj, dispatcher.mapInterruptIntToBoolean(msg.arg1));
                     break;
 
                 case REQUEST_CANCEL_TAG:
-                    dispatcher.performCancelTag(msg.obj);
+                    dispatcher.performCancelTag(msg.obj, dispatcher.mapInterruptIntToBoolean(msg.arg1));
                     break;
 
                 case REQUEST_PAUSE:
@@ -482,9 +486,9 @@ public class RocketDispatcher {
         }
     }
 
-    private void cancelRequest(RocketRequest request, Object tag) {
+    private void cancelRequest(RocketRequest request, Object tag, boolean interruptIfRunning) {
         if (request != null && tag.equals(request.getTag())) {
-            performCancel(request);
+            performCancel(request, interruptIfRunning);
         }
     }
 
@@ -540,6 +544,16 @@ public class RocketDispatcher {
             }
         }
 
+    }
+
+
+    boolean mapInterruptIntToBoolean(int interruptIfRunning) {
+        return interruptIfRunning != NO_INTERRUPT_IF_RUNNING;
+    }
+
+
+    private int mapInterruptBooleanToInt(boolean interruptIfRunning) {
+        return interruptIfRunning ? INTERRUPT_IF_RUNNING : NO_INTERRUPT_IF_RUNNING;
     }
 
 
