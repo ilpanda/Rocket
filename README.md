@@ -73,16 +73,16 @@ compile 'com.ilpanda:rocket:1.0.1'
 如果你想要使用回调, 使用 RocketCallback 。回调方法都是在主线程执行。
 
 ```
-        Rocket.get()
+      Rocket.get()
                 .load(downloadUrl)
                 .callback(new RocketRequest.RocketCallback() {
                     @Override
-                    public void onSuccess(File result) {
+                    public void onSuccess(String url, File result) {
 
                     }
 
                     @Override
-                    public void onError(Exception e) {
+                    public void onError(String url, Exception e) {
 
                     }
 
@@ -112,11 +112,11 @@ compile 'com.ilpanda:rocket:1.0.1'
 如果文件已经成功下载到本地,默认情况下 Rocket 不会重新下载。
 
 ```
-     Rocket.get()
+      Rocket.get()
                 .load(downloadUrl)
                 .callback(new RocketRequest.SimpleCallback() {
                     @Override
-                    public void onSuccess(File result) {
+                    public void onSuccess(String url, File result) {
 
                     }
                 })
@@ -126,19 +126,21 @@ compile 'com.ilpanda:rocket:1.0.1'
 如果文件已经成功下载到本地,但是你想要重新从网络下载文件, 调用 forceDownload() 方法。
 
 ```
-     Rocket.get()
+      Rocket.get()
                 .load(downloadUrl)
                 .forceDownload()
                 .callback(new RocketRequest.RocketCallback() {
                     @Override
-                    public void onSuccess(File result) {
+                    public void onSuccess(String url, File result) {
                         Log.i(TAG, "download success : " + result.getAbsolutePath());
                     }
 
                     @Override
-                    public void onError(Exception e) {
+                    public void onError(String url, Exception e) {
+                        Toast.makeText(MainActivity.this, "下载失败,请查看日志。", Toast.LENGTH_LONG).show();
                         Log.e(TAG, "download error : \n " + Utils.getThreadStack(e));
                     }
+
 
                     @Override
                     public void onProgress(long bytesRead, long contentLength, float percent) {
@@ -152,24 +154,22 @@ compile 'com.ilpanda:rocket:1.0.1'
 默认情况下, Rocket 每隔一秒刷新一次下载进度,如果你想更改刷新间隔,可以使用 interval() 方法:
 
 ```
-      Rocket.get()
+        Rocket.get()
                 .load(downloadUrl)
-                .interval(3000)  // 每隔 3s刷新一次下载进度。
-                .callback(new RocketRequest.RocketCallback() {
-                    @Override
-                    public void onSuccess(File result) {
-                        Log.i(TAG, "download success : " + result.getAbsolutePath());
-                    }
-
-                    @Override
-                    public void onError(Exception e) {
-                        Log.e(TAG, "download error : \n " + Utils.getThreadStack(e));
-                    }
+                .interval(3000)
+                .forceDownload()
+                .callback(new RocketRequest.SimpleCallback() {
 
                     @Override
                     public void onProgress(long bytesRead, long contentLength, float percent) {
                         Log.i(TAG, "download progress : " + bytesRead + "-- the content length : "
                                 + contentLength + "-- the percent : " + percent);
+                    }
+
+                    @Override
+                    public void onError(String String, Exception e) {
+                        Toast.makeText(MainActivity.this, "下载失败,请查看日志。", Toast.LENGTH_LONG).show();
+                        Log.e(TAG, "download error : \n " + Utils.getThreadStack(e));
                     }
                 })
                 .download();
@@ -180,20 +180,22 @@ compile 'com.ilpanda:rocket:1.0.1'
 
 ```
 // 下面代码会下载失败,因为所需要的空间超过了磁盘空间。
-       Rocket.get()
+        Rocket.get()
                 .load(downloadUrl)
                 .fileSize(Long.MAX_VALUE)
                 .forceDownload()
                 .callback(new RocketRequest.RocketCallback() {
                     @Override
-                    public void onSuccess(File result) {
+                    public void onSuccess(String url, File result) {
                         Log.i(TAG, "download success : " + result.getAbsolutePath());
                     }
 
                     @Override
-                    public void onError(Exception e) {
+                    public void onError(String url, Exception e) {
+                        Toast.makeText(MainActivity.this, "下载失败,请查看日志。", Toast.LENGTH_LONG).show();
                         Log.e(TAG, "download error : \n " + Utils.getThreadStack(e));
                     }
+
 
                     @Override
                     public void onProgress(long bytesRead, long contentLength, float percent) {
@@ -237,16 +239,24 @@ compile 'com.ilpanda:rocket:1.0.1'
 文件校验失败后,会回调 RocketCallback 的 onError() 方法。
 
 ```
-      Rocket.get()
-                  .load(downloadUrl)
-                  .md5(fileMD5)
-                  .callback(new RocketRequest.SimpleCallback() {
-                      @Override
-                      public void onError(Exception e) {
-                          Log.i(TAG, "download error : \n " + Utils.getThreadStack(e));
-                      }
-                  })
-                  .download();
+        Rocket.get()
+                .load(downloadUrl)
+                .md5(fileMD5)
+                .callback(new RocketRequest.SimpleCallback() {
+                    @Override
+                    public void onSuccess(String url, File result) {
+                        Log.i(TAG, "download success : " + result.getAbsolutePath());
+                    }
+
+                    @Override
+                    public void onError(String url, Exception e) {
+                        Toast.makeText(MainActivity.this, "下载失败,请查看日志。", Toast.LENGTH_LONG).show();
+                        Log.e(TAG, "download error : \n " + Utils.getThreadStack(e));
+                    }
+
+
+                })
+                .download();
 ```
 
 ---
