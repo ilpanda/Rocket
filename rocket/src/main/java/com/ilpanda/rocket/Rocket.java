@@ -112,6 +112,11 @@ public class Rocket {
     }
 
 
+    public boolean isInFlight(String url) {
+        return dispatcher.isInFlight(url);
+    }
+
+
     void download(RocketRequest request) {
         dispatcher.dispatchSubmit(request);
     }

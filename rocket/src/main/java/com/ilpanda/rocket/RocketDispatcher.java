@@ -12,6 +12,7 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
+import android.text.TextUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -556,5 +557,10 @@ public class RocketDispatcher {
         return interruptIfRunning ? INTERRUPT_IF_RUNNING : NO_INTERRUPT_IF_RUNNING;
     }
 
+
+    boolean isInFlight(String url) {
+        if (TextUtils.isEmpty(url)) return false;
+        return responseMap.get(url) != null;
+    }
 
 }
