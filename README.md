@@ -258,7 +258,7 @@ compile 'com.ilpanda:rocket:1.0.2'
 
 1. 添加日志配置。
 2. 支持断点下载。
-4. 支持建造者构建 Rocket 。
+4. 支持自定义配置 Rocket 。
 ---
 
 ### Thanks
