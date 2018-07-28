@@ -68,7 +68,10 @@ public class RocketResponse implements Runnable {
         if (requests == null) {
             requests = new ArrayList<>();
         }
-        requests.add(request);
+
+        if (!isExistCallback(request)) {
+            requests.add(request);
+        }
     }
 
     void detach(RocketRequest request) {
@@ -175,5 +178,17 @@ public class RocketResponse implements Runnable {
     @Nullable
     Object getTag() {
         return request != null ? request.getTag() : null;
+    }
+
+
+    private boolean isExistCallback(RocketRequest attachRequest) {
+        if (attachRequest.getCallback() == null) return false;
+        for (RocketRequest rocketRequest : requests) {
+            RocketRequest.RocketCallback callback = rocketRequest.getCallback();
+            if (callback != null && callback == attachRequest.getCallback()) {
+                return true;
+            }
+        }
+        return false;
     }
 }
