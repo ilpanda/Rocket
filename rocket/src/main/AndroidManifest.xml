@@ -1,1 +1,10 @@
-<manifest package="com.ilpanda.rocket" />
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.ilpanda.rocket">
+
+    <application>
+        <provider
+            android:name=".RocketContentProvider"
+            android:authorities="${applicationId}.com.ilpanda.rocket"
+            android:exported="false" />
+    </application>
+</manifest>

@@ -20,8 +20,7 @@ public class Rocket {
     @SuppressLint("StaticFieldLeak")
     private static volatile Rocket singleton = null;
 
-    @SuppressLint("StaticFieldLeak")
-    static Context context;
+    final Context context;
 
     private RocketDispatcher dispatcher;
 
@@ -29,29 +28,25 @@ public class Rocket {
 
     private List<RocketInterceptor> interceptorList;
 
-    public static void initialize(Context context) {
-
-        if (context == null) {
-            throw new IllegalArgumentException("context  is  null");
-        }
-
-        Rocket.context = context;
-        DEFAULT_PATH = new File(context.getExternalFilesDir(null), "").getAbsolutePath();
-    }
-
 
     public static Rocket get() {
         if (singleton == null) {
             synchronized (Rocket.class) {
                 if (singleton == null) {
-                    singleton = new Rocket();
+                    if (RocketContentProvider.context == null) {
+                        throw new IllegalStateException("context == null");
+                    }
+                    singleton = new Rocket(RocketContentProvider.context);
                 }
             }
         }
         return singleton;
     }
 
-    private Rocket() {
+    private Rocket(Context context) {
+
+        this.context = context;
+        DEFAULT_PATH = new File(context.getExternalFilesDir(null), "").getAbsolutePath();
 
         RocketExecutorService executorService = new RocketExecutorService();
         dispatcher = new RocketDispatcher(context, this, executorService, HANDLER);
@@ -63,6 +58,7 @@ public class Rocket {
         interceptorList.add(new PrepareFileInterceptor());
         interceptorList.add(new DiskSpaceInterceptor());
         interceptorList.add(new NetworkInterceptor(rocketDownloader));
+
     }
 
     public RocketRequest load(String url) {

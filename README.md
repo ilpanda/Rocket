@@ -262,9 +262,11 @@ compile 'com.ilpanda:rocket:1.0.2'
 ---
 
 ### TODO
+
 1. 添加日志配置。
 2. 支持断点下载。
-
+3. 取消在 Application 中初始化 Rocket 。
+4. 支持建造者构建 Rocket 。
 ---
 
 ### Thanks

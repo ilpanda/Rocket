@@ -128,9 +128,6 @@ public class RocketRequest {
     }
 
     public void download() {
-        if (Rocket.context == null) {
-            throw new IllegalArgumentException("you need  to initialize  Rocket in your application");
-        }
         rocket.download(this);
     }
 

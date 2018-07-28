@@ -27,6 +27,9 @@ public class RocketDownloader implements Downloader {
     private RocketDispatcher dispatcher;
 
 
+    private static final String CONTENT_TYPE_SVG = "image/svg+xml";
+
+
     public RocketDownloader(RocketDispatcher dispatcher) {
 
         this.dispatcher = dispatcher;
@@ -57,18 +60,23 @@ public class RocketDownloader implements Downloader {
                 throw new UnExpectedResponseCodeException("Unexpected code: " + response);
             }
 
-            long contentLength;
+            long contentLength = 0;
             String contentLengthStr = response.header("Content-Length");
+
+
+            boolean isSVG = CONTENT_TYPE_SVG.equalsIgnoreCase(response.header("Content-type"));
 
             // check  the  Content-length
             if (!TextUtils.isEmpty(contentLengthStr)) {
                 contentLength = Long.parseLong(contentLengthStr);
             } else {
-                throw new ResponseEmptyException("Content-Length is null" + response);
+                if (!isSVG) {
+                    throw new ResponseEmptyException("Content-Length is null" + response);
+                }
             }
 
-            if (contentLength == 0) {
-                throw new ResponseEmptyException("the  response body size  is  0" + response);
+            if (contentLength == 0 && !isSVG) {
+                throw new ResponseEmptyException("the  response body size  is  0 " + response);
             }
 
             // check  the ResponseBody
