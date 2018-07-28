@@ -137,11 +137,6 @@ public class RocketDispatcher {
         dispatcherHandler.sendMessage(dispatcherHandler.obtainMessage(REQUEST_RETRY, response));
     }
 
-    void dispatchCancelSuccess(String url) {
-
-
-    }
-
     void dispatchProgress(RocketRequest request) {
         dispatcherHandler.sendMessage(dispatcherHandler.obtainMessage(REQUEST_PROGRESS, request));
     }

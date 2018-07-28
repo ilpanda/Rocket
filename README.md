@@ -24,7 +24,6 @@ Rocket 是为了让 Android 平台上的文件下载更简单。
 
 ### 下载
 
-
 你可以下载源码依赖 module , 也可以通过 Maven or Gradle 依赖 。
 
 ```
@@ -44,7 +43,7 @@ compile 'com.ilpanda:rocket:1.0.2'
 ---
 
 
-### 使用方法
+### 添加权限
 
 你需要在 AndroidManifest.xml 添加以下权限。
 
@@ -52,9 +51,11 @@ compile 'com.ilpanda:rocket:1.0.2'
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 ```
+---
 
+### 使用 :
 
-最简单的方法 :
+链式调用 :
 
 ```
    Rocket.get()
@@ -63,7 +64,7 @@ compile 'com.ilpanda:rocket:1.0.2'
 ```
 
 
-如果你想要使用回调, 使用 RocketCallback 。回调方法都是在主线程执行。
+回调 : 回调方法都是在主线程执行。
 
 ```
       Rocket.get()
@@ -102,7 +103,7 @@ compile 'com.ilpanda:rocket:1.0.2'
 ```
 
 
-如果文件已经成功下载到本地,默认情况下 Rocket 不会重新下载。
+如果文件已经成功下载到本地,默认情况下 Rocket 不会再次下载。
 
 ```
       Rocket.get()
@@ -144,7 +145,7 @@ compile 'com.ilpanda:rocket:1.0.2'
                 .download();
 ```
 
-默认情况下, Rocket 每隔一秒刷新一次下载进度,如果你想更改刷新间隔,可以使用 interval() 方法:
+默认情况下, Rocket 每隔一秒刷新一次下载进度,如果你想更改刷新间隔,可以使用 interval() 方法 :
 
 ```
         Rocket.get()
@@ -229,7 +230,7 @@ compile 'com.ilpanda:rocket:1.0.2'
 ```
 
 如果文件下载成功后,你想要校验文件的 MD5 ,你可以使用以下代码 :
-文件校验失败后,会回调 RocketCallback 的 onError() 方法。
+如果文件校验失败,会回调 RocketCallback 的 onError() 方法。
 
 ```
         Rocket.get()
