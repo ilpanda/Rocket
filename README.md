@@ -46,14 +46,7 @@ compile 'com.ilpanda:rocket:1.0.2'
 
 ### 使用方法
 
-
-在使用 Rocket 之前, 你需要在你的 Application 当中初始化 Rocket。
-
-```
-        Rocket.initialize(this);
-```
-
-你也需要在 AndroidManifest.xml 添加以下权限。
+你需要在 AndroidManifest.xml 添加以下权限。
 
 ```
     <uses-permission android:name="android.permission.INTERNET" />
@@ -265,7 +258,6 @@ compile 'com.ilpanda:rocket:1.0.2'
 
 1. 添加日志配置。
 2. 支持断点下载。
-3. 取消在 Application 中初始化 Rocket 。
 4. 支持建造者构建 Rocket 。
 ---
 
