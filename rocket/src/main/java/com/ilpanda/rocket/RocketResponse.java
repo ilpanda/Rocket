@@ -115,7 +115,7 @@ public class RocketResponse implements Runnable {
             dispatcher.dispatchError(this);
         } catch (InterruptedIOException e) {
             exception = e;
-            dispatcher.dispatchCancelSuccess(this.url);
+            dispatcher.dispatchError(this);
         } catch (IOException e) {
             exception = e;
             dispatcher.dispatchRetry(this);
