@@ -30,7 +30,7 @@ Rocket 是为了让 Android 平台上的文件下载更简单。
 <dependency>
   <groupId>com.ilpanda</groupId>
   <artifactId>rocket</artifactId>
-  <version>1.0.2</version>
+  <version>1.0.3</version>
   <type>pom</type>
 </dependency>
 ```
@@ -38,7 +38,7 @@ Rocket 是为了让 Android 平台上的文件下载更简单。
 Gradle :
 
 ```
-compile 'com.ilpanda:rocket:1.0.2'
+compile 'com.ilpanda:rocket:1.0.3'
 ```
 ---
 
