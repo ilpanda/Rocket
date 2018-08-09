@@ -5,9 +5,10 @@ import java.io.IOException;
 
 public class PrepareFileInterceptor extends RocketInterceptor {
 
+
     private static final String TAG = "PrepareFileInterceptor";
 
-    private PrepareFileException exception;
+    private IOException exception;
 
     @Override
     public boolean canInterceptor(RocketRequest request) {
@@ -55,7 +56,7 @@ public class PrepareFileInterceptor extends RocketInterceptor {
             request.setTemFile(temFile);
 
         } catch (IOException e) {
-            this.exception = new PrepareFileException(e);
+            this.exception = e;
             return true;
         }
 
@@ -65,7 +66,9 @@ public class PrepareFileInterceptor extends RocketInterceptor {
     @Override
     public File interceptor(RocketRequest request) throws IOException {
         if (exception != null) {
-            throw exception;
+            String error = Utils.getThreadStack(exception);
+            exception = null;
+            throw new PrepareFileException(error);
         }
         return request.getTargetFile();
     }

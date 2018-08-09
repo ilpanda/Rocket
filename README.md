@@ -117,7 +117,7 @@ compile 'com.ilpanda:rocket:1.0.3'
                 .download();
 ```
 
-如果文件已经成功下载到本地,但是你想要重新从网络下载文件, 调用 forceDownload() 方法。
+如果文件已经成功下载到本地,但是你想要强制从网络下载文件, 调用 forceDownload() 方法。
 
 ```
       Rocket.get()
