@@ -8,9 +8,9 @@ import java.io.IOException;
 public class NetworkInterceptor extends RocketInterceptor {
 
 
-    private RocketDownloader downloader;
+    private Downloader downloader;
 
-    public NetworkInterceptor(RocketDownloader downloader) {
+    public NetworkInterceptor(Downloader downloader) {
         this.downloader = downloader;
     }
 

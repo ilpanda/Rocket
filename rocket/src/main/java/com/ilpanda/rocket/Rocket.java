@@ -5,10 +5,13 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.support.annotation.Nullable;
+import android.text.TextUtils;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 
 import static com.ilpanda.rocket.RocketDispatcher.REQUEST_BATCH_RESUME;
 import static com.ilpanda.rocket.RocketDispatcher.RESPONSE_COMPLETE;
@@ -17,16 +20,22 @@ import static com.ilpanda.rocket.RocketDispatcher.RESPONSE_PROGRESS;
 public class Rocket {
 
 
+    private static final String TAG = "Rocket";
+
     @SuppressLint("StaticFieldLeak")
     private static volatile Rocket singleton = null;
 
-    final Context context;
+    private final Context context;
 
     private RocketDispatcher dispatcher;
 
     private static String DEFAULT_PATH;
 
     private List<RocketInterceptor> interceptorList;
+
+    private Logger logger;
+
+    private boolean loggingEnabled;
 
 
     public static Rocket get() {
@@ -36,34 +45,161 @@ public class Rocket {
                     if (RocketContentProvider.context == null) {
                         throw new IllegalStateException("context == null");
                     }
-                    singleton = new Rocket(RocketContentProvider.context);
+                    singleton = new Rocket.Builder(RocketContentProvider.context).Build();
                 }
             }
         }
         return singleton;
     }
 
-    private Rocket(Context context) {
+    private Rocket(Context context, String downloadPath, RocketDispatcher dispatcher, Logger logger, boolean loggingEnabled, Downloader downloader,
+                   @Nullable List<RocketInterceptor> interceptors, @Nullable List<RocketInterceptor> networkInterceptors) {
 
         this.context = context;
-        DEFAULT_PATH = new File(context.getExternalFilesDir(null), "").getAbsolutePath();
+        DEFAULT_PATH = downloadPath;
+        this.dispatcher = dispatcher;
+        this.logger = logger;
+        this.loggingEnabled = loggingEnabled;
 
-        RocketExecutorService executorService = new RocketExecutorService();
-        dispatcher = new RocketDispatcher(context, this, executorService, HANDLER);
+        dispatcher.rocket = this;
 
-        RocketDownloader rocketDownloader = new RocketDownloader(dispatcher);
+        // before download
+        this.interceptorList = new ArrayList<>();
+        this.interceptorList.add(new UrlInterceptor());
+        this.interceptorList.add(new PrepareFileInterceptor());
+        this.interceptorList.add(new DiskSpaceInterceptor());
+        if (interceptors != null) {
+            this.interceptorList.addAll(interceptors);
+        }
+        this.interceptorList.add(new NetworkInterceptor(downloader));
 
-        interceptorList = new ArrayList<>();
-        interceptorList.add(new UrlInterceptor());
-        interceptorList.add(new PrepareFileInterceptor());
-        interceptorList.add(new DiskSpaceInterceptor());
-        interceptorList.add(new NetworkInterceptor(rocketDownloader));
+        // after download
+        if (networkInterceptors != null) {
+            this.interceptorList.addAll(networkInterceptors);
+        }
+    }
+
+
+    public static class Builder {
+
+        private final Context context;
+
+        private Downloader downloader;
+
+        private ExecutorService executorService;
+
+        private Logger logger;
+
+        private String downloadPath;
+
+        private List<RocketInterceptor> interceptors;
+
+        private List<RocketInterceptor> networkInterceptors;
+
+        private boolean loggingEnabled;
+
+        public Builder(Context context) {
+            if (context == null) {
+                throw new IllegalArgumentException("Context must not be null");
+            }
+            this.context = context;
+        }
+
+        public Builder logger(Logger logger) {
+            if (logger == null) {
+                throw new IllegalArgumentException("Logger must not be null");
+            }
+            this.logger = logger;
+            return this;
+        }
+
+        public Builder downloader(Downloader downloader) {
+            if (downloader == null) {
+                throw new IllegalArgumentException("Downloader must not be null");
+            }
+            this.downloader = downloader;
+            return this;
+        }
+
+        public Builder executorService(ExecutorService executorService) {
+            if (executorService == null) {
+                throw new IllegalArgumentException("ExecutorService must not be null");
+            }
+            this.executorService = executorService;
+            return this;
+        }
+
+        public Builder downloadPath(String downloadPath) {
+            if (TextUtils.isEmpty(downloadPath)) {
+                throw new IllegalArgumentException("downloadPath must not be null");
+            }
+            this.downloadPath = downloadPath;
+            return this;
+        }
+
+
+        public Builder addInterceptor(RocketInterceptor interceptor) {
+
+            if (interceptor == null) {
+                throw new IllegalArgumentException("interceptor must not be null");
+            }
+            if (interceptors == null) {
+                interceptors = new ArrayList<>();
+            }
+            interceptors.add(interceptor);
+            return this;
+        }
+
+
+        public Builder addNetworkInterceptor(RocketInterceptor interceptor) {
+
+            if (interceptor == null) {
+                throw new IllegalArgumentException("interceptor must not be null");
+            }
+            if (networkInterceptors == null) {
+                networkInterceptors = new ArrayList<>();
+            }
+            networkInterceptors.add(interceptor);
+            return this;
+        }
+
+
+        public Builder loggingEnabled(boolean loggingEnabled) {
+            this.loggingEnabled = loggingEnabled;
+            return this;
+        }
+
+
+        public Rocket Build() {
+
+            Context context = this.context;
+
+            if (executorService == null) {
+                this.executorService = new RocketExecutorService();
+            }
+
+            if (downloadPath == null) {
+                this.downloadPath = new File(context.getExternalFilesDir(null), "").getAbsolutePath();
+            }
+
+            if (this.logger == null) {
+                logger = new Logger.AndroidLogger(TAG);
+            }
+
+            RocketDispatcher dispatcher = new RocketDispatcher(context, executorService, HANDLER, logger, loggingEnabled);
+            if (downloader == null) {
+                this.downloader = new RocketDownloader(dispatcher);
+            }
+
+            return new Rocket(context, this.downloadPath, dispatcher, logger, loggingEnabled, downloader, interceptors, networkInterceptors);
+        }
 
     }
 
+
     public RocketRequest load(String url) {
         if (url == null) {
-            throw new IllegalArgumentException("download  url  can not be null   ");
+            throw new IllegalArgumentException("download  url  must not be null   ");
         }
         return new RocketRequest(this, url);
     }

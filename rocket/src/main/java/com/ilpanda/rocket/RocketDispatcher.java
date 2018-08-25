@@ -68,7 +68,7 @@ public class RocketDispatcher {
 
     final Map<String, RocketRequest> failedMap;
 
-    final Rocket rocket;
+    Rocket rocket;
 
     final Handler dispatcherHandler;
 
@@ -88,10 +88,12 @@ public class RocketDispatcher {
 
     boolean airplaneMode;
 
+    private Logger logger;
+    private boolean loggingEnabled;
 
-    public RocketDispatcher(Context context, Rocket rocket, ExecutorService executorService, Handler mainThreadHandler) {
+
+    public RocketDispatcher(Context context, ExecutorService executorService, Handler mainThreadHandler, Logger logger, boolean loggingEnabled) {
         this.context = context;
-        this.rocket = rocket;
         this.executorService = executorService;
         this.mainThreadHandler = mainThreadHandler;
         this.dispatcherThread = new HandlerThread("RocketDispatcher HandlerThread", THREAD_PRIORITY_BACKGROUND);
@@ -109,6 +111,9 @@ public class RocketDispatcher {
 
         this.broadcastReceiver = new NetworkBroadcastReceiver(this);
         this.broadcastReceiver.register();
+
+        this.logger = logger;
+        this.loggingEnabled = loggingEnabled;
     }
 
 

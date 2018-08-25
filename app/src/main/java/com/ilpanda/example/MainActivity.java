@@ -22,9 +22,35 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Rocket.initialize(this);
-
         initView();
+
+
+        String downloadUrl = TestUriProvider.APK_DOWNLOAD_1;
+
+        Rocket.get()
+                .load(downloadUrl)
+                .forceDownload()
+                .callback(new RocketRequest.RocketCallback() {
+
+                    @Override
+                    public void onSuccess(String url, File result) {
+                        Log.i(TAG, "download success : " + result.getAbsolutePath());
+                    }
+
+                    @Override
+                    public void onError(String url, Exception e) {
+                        Toast.makeText(MainActivity.this, "下载失败,请查看日志。", Toast.LENGTH_LONG).show();
+                        Log.e(TAG, "download error : \n " + Utils.getThreadStack(e));
+                    }
+
+                    @Override
+                    public void onProgress(long bytesRead, long contentLength, float percent) {
+                        Log.i(TAG, "download progress : " + bytesRead + "-- the content length : "
+                                + contentLength + "-- the percent : " + percent);
+                    }
+                })
+                .download();
+
     }
 
 
@@ -222,5 +248,6 @@ public class MainActivity extends AppCompatActivity {
                 })
                 .download();
     }
+
 
 }
