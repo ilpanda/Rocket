@@ -27,7 +27,7 @@ public class Rocket {
 
     private RocketDispatcher dispatcher;
 
-    private static String DEFAULT_PATH;
+    private String defaultPath;
 
     private List<RocketInterceptor> interceptorList;
 
@@ -53,7 +53,7 @@ public class Rocket {
     private Rocket(String downloadPath, RocketDispatcher dispatcher, Logger logger, boolean loggingEnabled, Downloader downloader,
                    @Nullable List<RocketInterceptor> interceptors, @Nullable List<RocketInterceptor> networkInterceptors) {
 
-        DEFAULT_PATH = downloadPath;
+        this.defaultPath = downloadPath;
         this.dispatcher = dispatcher;
         this.logger = logger;
         this.loggingEnabled = loggingEnabled;
@@ -256,7 +256,7 @@ public class Rocket {
     }
 
     String getDefaultPath() {
-        return DEFAULT_PATH;
+        return this.defaultPath;
     }
 
     List<RocketInterceptor> getInterceptorList() {
