@@ -25,8 +25,6 @@ public class Rocket {
     @SuppressLint("StaticFieldLeak")
     private static volatile Rocket singleton = null;
 
-    private final Context context;
-
     private RocketDispatcher dispatcher;
 
     private static String DEFAULT_PATH;
@@ -52,10 +50,9 @@ public class Rocket {
         return singleton;
     }
 
-    private Rocket(Context context, String downloadPath, RocketDispatcher dispatcher, Logger logger, boolean loggingEnabled, Downloader downloader,
+    private Rocket(String downloadPath, RocketDispatcher dispatcher, Logger logger, boolean loggingEnabled, Downloader downloader,
                    @Nullable List<RocketInterceptor> interceptors, @Nullable List<RocketInterceptor> networkInterceptors) {
 
-        this.context = context;
         DEFAULT_PATH = downloadPath;
         this.dispatcher = dispatcher;
         this.logger = logger;
@@ -191,7 +188,7 @@ public class Rocket {
                 this.downloader = new RocketDownloader(dispatcher);
             }
 
-            return new Rocket(context, this.downloadPath, dispatcher, logger, loggingEnabled, downloader, interceptors, networkInterceptors);
+            return new Rocket(this.downloadPath, dispatcher, logger, loggingEnabled, downloader, interceptors, networkInterceptors);
         }
 
     }
