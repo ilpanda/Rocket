@@ -68,6 +68,7 @@ public class Rocket {
         if (interceptors != null) {
             this.interceptorList.addAll(interceptors);
         }
+        //download
         this.interceptorList.add(new NetworkInterceptor(downloader));
 
         // after download
