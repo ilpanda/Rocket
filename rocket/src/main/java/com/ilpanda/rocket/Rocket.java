@@ -50,6 +50,21 @@ public class Rocket {
         return singleton;
     }
 
+
+    public static void setSingleton(Rocket rocket) {
+
+        if (rocket == null) {
+            throw new IllegalArgumentException("Rocket must  not be null.");
+        }
+
+        synchronized (Rocket.class) {
+            if (singleton != null) {
+                throw new IllegalStateException("Singleton instance already exists .");
+            }
+            singleton = rocket;
+        }
+    }
+
     private Rocket(String downloadPath, RocketDispatcher dispatcher, Logger logger, boolean loggingEnabled, Downloader downloader,
                    @Nullable List<RocketInterceptor> interceptors, @Nullable List<RocketInterceptor> networkInterceptors) {
 
