@@ -51,7 +51,7 @@ public class Rocket {
     }
 
 
-    public static void setSingleton(Rocket rocket) {
+    public static void setSingletonInstance(Rocket rocket) {
 
         if (rocket == null) {
             throw new IllegalArgumentException("Rocket must  not be null.");
